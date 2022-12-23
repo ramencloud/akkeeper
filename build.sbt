@@ -40,7 +40,7 @@ val TestDependencies = Seq(
 
 val CommonSettings = Seq(
   organization := "com.dotdata",
-  scalaVersion := "2.12.13",
+  scalaVersion := "2.12.15",
   crossScalaVersions := Seq("2.11.12", scalaVersion.value),
 
   organizationHomepage := Some(url("https://github.com/ramencloud")),
