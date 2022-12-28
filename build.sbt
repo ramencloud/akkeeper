@@ -19,17 +19,11 @@ val AkkaHttpVersion = "10.1.13"
 val CuratorVersion = "5.1.0"
 val SprayJsonVersion = "1.3.4"
 val HadoopVersion = "3.2.2"
-val ScalaTestVersion = "3.0.8"
-val ScalaCheckVersion = "1.13.5"
-val ScalamockVersion = "3.6.0"
+val ScalaTestVersion = "3.0.9"
+val ScalamockVersion = "3.4.2"
 val Slf4jVersion = "1.7.30"
 val ScoptsVersion = "3.5.0"
 val TypesafeConfigVersion = "1.3.4"
-
-val scalatest = "org.scalatest" %% "scalatest" % ScalaTestVersion
-val scalacheck = "org.scalacheck" %% "scalacheck" % ScalaCheckVersion
-val scalamock = "org.scalamock" %% "scalamock-scalatest-support" % ScalamockVersion
-val scalactic = "org.scalactic" %% "scalactic" % ScalaTestVersion
 
 val HadoopDependencies = Seq(
   "org.apache.hadoop" % "hadoop-common" % HadoopVersion % "provided",
@@ -40,15 +34,13 @@ val HadoopDependencies = Seq(
 )
 
 val TestDependencies = Seq(
-  scalatest,
-  scalacheck,
-  scalamock,
-  scalactic
+  "org.scalatest" %% "scalatest" % ScalaTestVersion % "test->*",
+  "org.scalamock" %% "scalamock-scalatest-support" % ScalamockVersion % "test->*"
 )
 
 val CommonSettings = Seq(
   organization := "com.dotdata",
-  scalaVersion := "2.12.15",
+  scalaVersion := "2.12.13",
   crossScalaVersions := Seq("2.11.12", scalaVersion.value),
 
   organizationHomepage := Some(url("https://github.com/ramencloud")),
@@ -76,13 +68,13 @@ val PublishSettings = Seq(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := (_ => false),
-//  publishTo := Some(
-//    if (version.value.trim.endsWith("SNAPSHOT")) {
-//      "snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-//    } else {
-//      "releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-//    }
-//  )
+  //  publishTo := Some(
+  //    if (version.value.trim.endsWith("SNAPSHOT")) {
+  //      "snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+  //    } else {
+  //      "releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+  //    }
+  //  )
 )
 
 val NoPublishSettings = Seq(
