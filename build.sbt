@@ -46,13 +46,6 @@ val TestDependencies = Seq(
   scalactic
 )
 
-//val TestDependencies = Seq(
-//  "org.scalatest" %% "scalatest" % ScalaTestVersion % "test->*",
-//  "org.scalacheck" %% "scalacheck" % ScalaCheckVersion % "test->*",
-//  "org.scalactic" %% "scalactic" % ScalaTestVersion % "test->*",
-//  "org.scalamock" %% "scalamock-scalatest-support" % ScalamockVersion % "test->*"
-//)
-
 val CommonSettings = Seq(
   organization := "com.dotdata",
   scalaVersion := "2.12.15",
