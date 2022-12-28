@@ -19,7 +19,7 @@ val AkkaHttpVersion = "10.1.13"
 val CuratorVersion = "5.1.0"
 val SprayJsonVersion = "1.3.4"
 val HadoopVersion = "3.2.2"
-val ScalaTestVersion = "3.0.8"
+val ScalaTestVersion = "3.0.9"
 val ScalaCheckVersion = "1.13.5"
 val ScalamockVersion = "3.6.0"
 val Slf4jVersion = "1.7.30"
@@ -110,7 +110,8 @@ val AkkeeperAppSettings = CommonSettings ++ PublishSettings ++ BuildInfoSettings
     "com.github.scopt" %% "scopt" % ScoptsVersion,
     ("org.apache.curator" % "curator-framework" % CuratorVersion).exclude("org.jboss.netty", "netty"),
     "org.apache.curator" % "curator-test" % CuratorVersion % "test->*",
-    "com.typesafe.akka" %% "akka-testkit" % AkkaVersion % "test->*"
+    "com.typesafe.akka" %% "akka-testkit" % AkkaVersion % "test->*",
+    "io.dropwizard.metrics" % "metrics-core" % "3.1.5"
   ),
 
   test in assembly := {},
