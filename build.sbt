@@ -73,7 +73,7 @@ val CommonSettings = Seq(
 )
 
 val PublishSettings = Seq(
-  publishMavenStyle := true,
+//  publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := (_ => false),
 //  publishTo := Some(
