@@ -7,13 +7,10 @@ jobs:
   publish:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v3.0.2
         with:
           fetch-depth: 0
-      - uses: olafurpg/setup-scala@v10
-      - run: .github/scripts/gpg-setup.sh
-        env:
-          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+      - uses: olafurpg/setup-scala@v13
       - run: sbt ci-release
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
