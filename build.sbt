@@ -26,10 +26,10 @@ val Slf4jVersion = "1.7.30"
 val ScoptsVersion = "3.5.0"
 val TypesafeConfigVersion = "1.3.4"
 
-val scalatest = "org.scalatest" %% "scalatest" % ScalaTestVersion
-val scalacheck = "org.scalacheck" %% "scalacheck" % ScalaCheckVersion
-val scalamock = "org.scalamock" %% "scalamock-scalatest-support" % ScalamockVersion
-val scalactic = "org.scalactic" %% "scalactic" % ScalaTestVersion
+val scalatest = "org.scalatest" %% "scalatest" % ScalaTestVersion % "test"
+val scalacheck = "org.scalacheck" %% "scalacheck" % ScalaCheckVersion % "test"
+val scalamock = "org.scalamock" %% "scalamock-scalatest-support" % ScalamockVersion % "test"
+val scalactic = "org.scalactic" %% "scalactic" % ScalaTestVersion % "test"
 
 val HadoopDependencies = Seq(
   "org.apache.hadoop" % "hadoop-common" % HadoopVersion % "provided",
@@ -69,12 +69,12 @@ val CommonSettings = Seq(
     "-language:implicitConversions",
     "-language:higherKinds"),
 
-  parallelExecution in Test := false
+  Test / parallelExecution := false
 )
 
 val PublishSettings = Seq(
   publishMavenStyle := true,
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   pomIncludeRepository := (_ => false),
 //  publishTo := Some(
 //    if (version.value.trim.endsWith("SNAPSHOT")) {
@@ -88,7 +88,7 @@ val PublishSettings = Seq(
 val NoPublishSettings = Seq(
   publishArtifact := false,
   publish := {},
-  skip in publish := true
+  publish / skip := true
 )
 
 val BuildInfoSettings = Seq(
@@ -114,9 +114,9 @@ val AkkeeperAppSettings = CommonSettings ++ PublishSettings ++ BuildInfoSettings
     "io.dropwizard.metrics" % "metrics-core" % "3.1.5"
   ),
 
-  test in assembly := {},
+  assembly / test := {},
 
-  mainClass in Compile := Some("akkeeper.launcher.LauncherMain"),
+  Compile / mainClass := Some("akkeeper.launcher.LauncherMain"),
 
   assembly / assemblyShadeRules := Seq(
     ShadeRule.rename("com.typesafe.config.**" -> "shadeio.config.@1").inAll,
@@ -124,7 +124,7 @@ val AkkeeperAppSettings = CommonSettings ++ PublishSettings ++ BuildInfoSettings
     ShadeRule.rename("shapeless.**" -> "shadeio.shapeless.@1").inAll
   ),
 
-  assemblyMergeStrategy in assembly := {
+  assembly / assemblyMergeStrategy := {
     case PathList("org", "apache", xs @ _*) => MergeStrategy.first
     case "log4j.properties" => MergeStrategy.concat
     case "reference.conf" => ReferenceMergeStrategy
@@ -132,21 +132,21 @@ val AkkeeperAppSettings = CommonSettings ++ PublishSettings ++ BuildInfoSettings
     case "akkeeper/BuildInfo$.class" => MergeStrategy.first
     case "META-INF/io.netty.versions.properties" => MergeStrategy.filterDistinctLines
     case x =>
-      val oldStrategy = (assemblyMergeStrategy in assembly).value
+      val oldStrategy = (assembly / assemblyMergeStrategy).value
       oldStrategy(x)
   },
 
-  assemblyJarName in assembly := { s"akkeeper-assembly-${version.value}.jar" },
+  assembly / assemblyJarName := { s"akkeeper-assembly-${version.value}.jar" },
 
-  packageName in Universal := {
+  Universal / packageName := {
     val scalaVer = scalaVersion.value
     "akkeeper_" + scalaVer.substring(0, scalaVer.lastIndexOf('.')) + "-" + version.value
   },
 
-  topLevelDirectory in Universal := Some("akkeeper-" + version.value),
+  Universal / topLevelDirectory := Some("akkeeper-" + version.value),
 
-  mappings in Universal := {
-    val fatJar = (assembly in Compile).value
+  Universal / mappings := {
+    val fatJar = (Compile / assembly).value
     Seq(
       new File(baseDirectory.value.getAbsolutePath, "../README.md") -> "README.md",
       new File(baseDirectory.value.getAbsolutePath, "../LICENSE") -> "LICENSE",
