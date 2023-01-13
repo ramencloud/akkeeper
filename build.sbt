@@ -20,16 +20,10 @@ val CuratorVersion = "5.1.0"
 val SprayJsonVersion = "1.3.4"
 val HadoopVersion = "3.2.2"
 val ScalaTestVersion = "3.0.9"
-val ScalaCheckVersion = "1.13.5"
-val ScalamockVersion = "3.6.0"
+val ScalamockVersion = "3.4.2"
 val Slf4jVersion = "1.7.30"
 val ScoptsVersion = "3.5.0"
 val TypesafeConfigVersion = "1.3.4"
-
-val scalatest = "org.scalatest" %% "scalatest" % ScalaTestVersion % "test"
-val scalacheck = "org.scalacheck" %% "scalacheck" % ScalaCheckVersion % "test"
-val scalamock = "org.scalamock" %% "scalamock-scalatest-support" % ScalamockVersion % "test"
-val scalactic = "org.scalactic" %% "scalactic" % ScalaTestVersion % "test"
 
 val HadoopDependencies = Seq(
   "org.apache.hadoop" % "hadoop-common" % HadoopVersion % "provided",
@@ -40,15 +34,13 @@ val HadoopDependencies = Seq(
 )
 
 val TestDependencies = Seq(
-  scalatest,
-  scalacheck,
-  scalamock,
-  scalactic
+  "org.scalatest" %% "scalatest" % ScalaTestVersion % "test->*",
+  "org.scalamock" %% "scalamock-scalatest-support" % ScalamockVersion % "test->*"
 )
 
 val CommonSettings = Seq(
   organization := "com.dotdata",
-  scalaVersion := "2.12.15",
+  scalaVersion := "2.12.13",
   crossScalaVersions := Seq("2.11.12", scalaVersion.value),
 
   organizationHomepage := Some(url("https://github.com/ramencloud")),
@@ -69,12 +61,12 @@ val CommonSettings = Seq(
     "-language:implicitConversions",
     "-language:higherKinds"),
 
-  Test / parallelExecution := false
+  parallelExecution in Test := false
 )
 
 val PublishSettings = Seq(
   publishMavenStyle := true,
-  Test / publishArtifact := false,
+  publishArtifact in Test := false,
   pomIncludeRepository := (_ => false),
 //  publishTo := Some(
 //    if (version.value.trim.endsWith("SNAPSHOT")) {
@@ -88,7 +80,7 @@ val PublishSettings = Seq(
 val NoPublishSettings = Seq(
   publishArtifact := false,
   publish := {},
-  publish / skip := true
+  skip in publish := true
 )
 
 val BuildInfoSettings = Seq(
@@ -110,13 +102,12 @@ val AkkeeperAppSettings = CommonSettings ++ PublishSettings ++ BuildInfoSettings
     "com.github.scopt" %% "scopt" % ScoptsVersion,
     ("org.apache.curator" % "curator-framework" % CuratorVersion).exclude("org.jboss.netty", "netty"),
     "org.apache.curator" % "curator-test" % CuratorVersion % "test->*",
-    "com.typesafe.akka" %% "akka-testkit" % AkkaVersion % "test->*",
-    "io.dropwizard.metrics" % "metrics-core" % "3.1.5"
+    "com.typesafe.akka" %% "akka-testkit" % AkkaVersion % "test->*"
   ),
 
-  assembly / test := {},
+  test in assembly := {},
 
-  Compile / mainClass := Some("akkeeper.launcher.LauncherMain"),
+  mainClass in Compile := Some("akkeeper.launcher.LauncherMain"),
 
   assembly / assemblyShadeRules := Seq(
     ShadeRule.rename("com.typesafe.config.**" -> "shadeio.config.@1").inAll,
@@ -124,7 +115,7 @@ val AkkeeperAppSettings = CommonSettings ++ PublishSettings ++ BuildInfoSettings
     ShadeRule.rename("shapeless.**" -> "shadeio.shapeless.@1").inAll
   ),
 
-  assembly / assemblyMergeStrategy := {
+  assemblyMergeStrategy in assembly := {
     case PathList("org", "apache", xs @ _*) => MergeStrategy.first
     case "log4j.properties" => MergeStrategy.concat
     case "reference.conf" => ReferenceMergeStrategy
@@ -132,21 +123,21 @@ val AkkeeperAppSettings = CommonSettings ++ PublishSettings ++ BuildInfoSettings
     case "akkeeper/BuildInfo$.class" => MergeStrategy.first
     case "META-INF/io.netty.versions.properties" => MergeStrategy.filterDistinctLines
     case x =>
-      val oldStrategy = (assembly / assemblyMergeStrategy).value
+      val oldStrategy = (assemblyMergeStrategy in assembly).value
       oldStrategy(x)
   },
 
-  assembly / assemblyJarName := { s"akkeeper-assembly-${version.value}.jar" },
+  assemblyJarName in assembly := { s"akkeeper-assembly-${version.value}.jar" },
 
-  Universal / packageName := {
+  packageName in Universal := {
     val scalaVer = scalaVersion.value
     "akkeeper_" + scalaVer.substring(0, scalaVer.lastIndexOf('.')) + "-" + version.value
   },
 
-  Universal / topLevelDirectory := Some("akkeeper-" + version.value),
+  topLevelDirectory in Universal := Some("akkeeper-" + version.value),
 
-  Universal / mappings := {
-    val fatJar = (Compile / assembly).value
+  mappings in Universal := {
+    val fatJar = (assembly in Compile).value
     Seq(
       new File(baseDirectory.value.getAbsolutePath, "../README.md") -> "README.md",
       new File(baseDirectory.value.getAbsolutePath, "../LICENSE") -> "LICENSE",
