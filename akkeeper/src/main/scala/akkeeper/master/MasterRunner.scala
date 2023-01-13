@@ -52,6 +52,7 @@ private[master] object MasterRunner {
         service = Some(newService)
         context.become(proxyReceive)
         unstashAll()
+
       case _ => stash()
     }
 
