@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 10
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "ramencloud/*"
+    # Pinned @main, no version tags. Dependabot cannot clone those private
+    # repos (git_dependencies_not_reachable) and that aborts the grouped bump.
+    ignore:
+      - dependency-name: "ramencloud/*"
