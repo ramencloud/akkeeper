@@ -11,13 +11,13 @@ jobs:
       JVM_OPTS:  -Xms2048M -Xmx2048M -Xss6M -XX:ReservedCodeCacheSize=256M -Dfile.encoding=UTF-8
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@0717577d45739eb3c851188b29f50ed6c0b2194e # v2.8.0
       - name: Setup Scala
-        uses: olafurpg/setup-scala@v10
+        uses: olafurpg/setup-scala@a2db88fb5c57396fbc1ff29a4bb0420072a3d6d8 # v10
         with:
           java-version: "adopt@1.8"
       - name: Coursier cache
-        uses: coursier/cache-action@v5
+        uses: coursier/cache-action@b74a57cd5434385877191a348c5f9929f064fda5 # v5
       - name: Build and test
         run: |
           sbt -v clean scalastyle +test
