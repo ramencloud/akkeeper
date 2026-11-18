@@ -5,6 +5,12 @@ updates:
     schedule:
       interval: "weekly"
       day: "monday"
+    # ramencloud/* releases reach consumers on release day (FF-7208).
+    # Other actions keep the 3-day cooldown.
+    cooldown:
+      default-days: 3
+      exclude:
+        - "ramencloud/*"
     open-pull-requests-limit: 10
     groups:
       github-actions:
